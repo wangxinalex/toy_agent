@@ -2,11 +2,14 @@ from __future__ import annotations
 
 import argparse
 import os
+from dotenv import load_dotenv
 
 from agent import run_agent
 
+load_dotenv()
+
 MAX_STEPS = 16
-DEFAULT_MODEL = os.getenv("ANTHROPIC_MODEL", "deepseek-v4-flash")
+DEFAULT_MODEL = os.getenv("ANTHROPIC_MODEL", "deepseek-chat")
 DEFAULT_BASE_URL = os.getenv(
     "ANTHROPIC_BASE_URL",
     "https://api.deepseek.com/anthropic/v1/messages",
