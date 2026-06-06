@@ -19,4 +19,6 @@ name: "GitHub Commit Workflow"
 - Never run destructive git commands (for example hard reset or force push) unless the user explicitly approves.
 - Prefer pushing to a feature branch instead of `main` unless the user explicitly asks to push `main`.
 - When asked to push, confirm target remote and branch before pushing.
-- After push, report the branch and what was pushed in one concise summary.
+- After push succeeds, immediately create a pull request with GitHub CLI (`gh pr create`) unless the user explicitly asks not to create a PR.
+- Use a clear PR title/body that matches the semantic-release commit intent and summarize key changes, validation, and risk.
+- After PR creation, report pushed branch, PR URL, and a one-line summary of what was included.
