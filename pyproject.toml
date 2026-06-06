@@ -4,4 +4,6 @@ version = "0.1.0"
 description = "Minimal teaching example of a coding agent using an Anthropic-compatible model"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "python-dotenv>=1.2.2",
+]
