@@ -9,7 +9,7 @@ from agent import run_agent
 load_dotenv()
 
 MAX_STEPS = 16
-DEFAULT_MODEL = os.getenv("ANTHROPIC_MODEL", "deepseek-chat")
+DEFAULT_MODEL = os.getenv("ANTHROPIC_MODEL", "deepseek-v4-pro")
 DEFAULT_BASE_URL = os.getenv(
     "ANTHROPIC_BASE_URL",
     "https://api.deepseek.com/anthropic/v1/messages",
@@ -21,7 +21,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Minimal coding agent using an Anthropic-compatible API.",
     )
-    parser.add_argument("task", help="What the agent should do.")
+    parser.add_argument("task", nargs="?", help="Optional first task to run.")
     return parser.parse_args()
 
 
@@ -39,13 +39,28 @@ def require_api_key() -> str:
 def main() -> None:
     args = parse_args()
     api_key = require_api_key()
-    run_agent(
-        args.task,
-        max_steps=MAX_STEPS,
-        api_key=api_key,
-        base_url=DEFAULT_BASE_URL,
-        model=DEFAULT_MODEL,
-    )
+
+    # 默认进入多轮对话；如果提供了 task，就先执行这一轮。
+    pending_task = args.task
+
+    while True:
+        if pending_task is None:
+            user_input = input("\nYou> ").strip()
+            if not user_input:
+                continue
+            if user_input.lower() in {"exit", "quit", "q"}:
+                print("Bye.")
+                break
+            pending_task = user_input
+
+        run_agent(
+            pending_task,
+            max_steps=MAX_STEPS,
+            api_key=api_key,
+            base_url=DEFAULT_BASE_URL,
+            model=DEFAULT_MODEL,
+        )
+        pending_task = None
 
 
 if __name__ == "__main__":
