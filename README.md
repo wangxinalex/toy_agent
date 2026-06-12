@@ -9,7 +9,7 @@
 按版本顺序阅读，**每个版本只引入极少的变化**：
 
 ```
-V1 (单轮闭环) → V2 (多轮交互) → V3 (流式+消息) → V4 (会话持久化) → V5+ (规划中)
+V1 (单轮闭环) → V2 (多轮交互) → V3 (流式+消息) → V4 (会话持久化) → V5 (补丁编辑) → V6+ (规划中)
 ```
 
 | 版本 | 命题 | 改了什么 |
@@ -18,7 +18,8 @@ V1 (单轮闭环) → V2 (多轮交互) → V3 (流式+消息) → V4 (会话持
 | V2 | 交互模式：怎么保持会话 | 只改 `main.py` |
 | V3 | 流式输出 + 消息结构 | 重写 `llm.py`，微调 `agent.py` |
 | V4 | 会话持久化：关闭再打开，对话还在 | 重写 `main.py`，微调 `agent.py` |
-| V5+ | 补丁编辑 / 命令安全 / 自动验证 | 见[路线图](docs/TOY_TO_USABLE_ROADMAP.md) |
+| V5 | 补丁式编辑：精确替换，不重写整个文件 | 改了 `tools.py` 和 `llm.py` |
+| V6+ | 命令安全 / 自动验证 | 见[路线图](docs/TOY_TO_USABLE_ROADMAP.md) |
 
 **建议所有学习者从 V1 开始。**
 
@@ -65,7 +66,8 @@ toy_agent/
     ├── v1-single-turn/
     ├── v2-multi-turn/
     ├── v3-streaming-messages/
-    └── v4-session-persistence/
+    ├── v4-session-persistence/
+    └── v5-patch-editing/
 ```
 
 ## 快速开始
@@ -75,7 +77,7 @@ toy_agent/
 export ANTHROPIC_API_KEY=your_deepseek_key
 
 # 2. 进入最新版本
-cd versions/v4-session-persistence
+cd versions/v5-patch-editing
 
 # 3. 安装依赖
 pip install python-dotenv
@@ -102,7 +104,7 @@ export ANTHROPIC_MODEL="claude-sonnet-4-6"
 
 ## 设计原则
 
-- **每个版本只改最少代码**。V1 → V2 只动了 `main.py`；V3 主改 `llm.py`；V4 主改 `main.py`。
+- **每个版本只改最少代码**。V1 → V2 只动了 `main.py`；V3 主改 `llm.py`；V4 主改 `main.py`；V5 只改 `tools.py` 和 `llm.py`。
 - **每个版本独立可运行**。`cd` 进去就能跑，互不依赖。
 - **代码即文档**。关键函数有注释，变量名刻意直白，结构刻意扁平。
 - **版本是目录快照**。横向对比文件用目录，纵向追踪变更用 Git。
