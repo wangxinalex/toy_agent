@@ -11,6 +11,7 @@
 | V3 | [`v3-streaming-messages/`](v3-streaming-messages/) | 流式输出 + 消息结构 | 改了 `llm.py` 和 `agent.py` |
 | V4 | [`v4-session-persistence/`](v4-session-persistence/) | 会话持久化：关闭再打开，对话还在 | 改了 `main.py` 和 `agent.py` |
 | V5 | [`v5-patch-editing/`](v5-patch-editing/) | 补丁式编辑：精确替换，不重写整个文件 | 改了 `tools.py` 和 `llm.py` |
+| V6 | [`v6-command-safety/`](v6-command-safety/) | 命令安全：白名单 + 危险模式拦截 + 超时 | 改了 `tools.py` 和 `llm.py` |
 
 ## V1 — 单轮对话
 
@@ -74,6 +75,18 @@ python main.py --list-sessions                     # 列出所有会话
 ```bash
 cd versions/v5-patch-editing
 python main.py "in tools.py, change the truncate_output default limit from 4000 to 8000"
+```
+
+## V6 — 命令安全
+
+**路径**：[`versions/v6-command-safety/`](v6-command-safety/)
+
+**一句话**：白名单只允许安全命令，危险模式拦截 `rm -rf`/`curl`/`sudo`，加 30 秒超时。
+
+**怎么跑**：
+```bash
+cd versions/v6-command-safety
+python main.py "run pytest and tell me the result"
 ```
 
 ## 学习建议
