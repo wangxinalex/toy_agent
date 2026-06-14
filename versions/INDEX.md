@@ -10,6 +10,7 @@
 | V2 | [`v2-multi-turn/`](v2-multi-turn/) | 交互模式：怎么保持会话不断开 | 只改了 `main.py` |
 | V3 | [`v3-streaming-messages/`](v3-streaming-messages/) | 流式输出 + 消息结构 | 改了 `llm.py` 和 `agent.py` |
 | V4 | [`v4-session-persistence/`](v4-session-persistence/) | 会话持久化：关闭再打开，对话还在 | 改了 `main.py` 和 `agent.py` |
+| V5 | [`v5-patch-editing/`](v5-patch-editing/) | 补丁式编辑：精确替换，不重写整个文件 | 改了 `tools.py` 和 `llm.py` |
 
 ## V1 — 单轮对话
 
@@ -61,6 +62,18 @@ cd versions/v4-session-persistence
 python main.py "read main.py"                      # 新会话，自动保存
 python main.py --resume 20260607-NNNNNN            # 恢复旧会话
 python main.py --list-sessions                     # 列出所有会话
+```
+
+## V5 — 补丁式编辑
+
+**路径**：[`versions/v5-patch-editing/`](v5-patch-editing/)
+
+**一句话**：新增 `apply_patch` 工具，编辑文件时只替换局部片段，不再重写整个文件。
+
+**怎么跑**：
+```bash
+cd versions/v5-patch-editing
+python main.py "in tools.py, change the truncate_output default limit from 4000 to 8000"
 ```
 
 ## 学习建议
