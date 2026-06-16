@@ -1,0 +1,4 @@
+sessions/
+__pycache__/
+.venv/
+uv.lock

@@ -9,7 +9,7 @@
 按版本顺序阅读，**每个版本只引入极少的变化**：
 
 ```
-V1 (单轮闭环) → V2 (多轮交互) → V3 (流式+消息) → V4 (会话持久化) → V5 (补丁编辑) → V6+ (规划中)
+V1 (单轮闭环) → V2 (多轮交互) → V3 (流式+消息) → V4 (会话持久化) → V5 (补丁编辑) → V6 (命令安全) → V7+ (规划中)
 ```
 
 | 版本 | 命题 | 改了什么 |
@@ -19,7 +19,8 @@ V1 (单轮闭环) → V2 (多轮交互) → V3 (流式+消息) → V4 (会话持
 | V3 | 流式输出 + 消息结构 | 重写 `llm.py`，微调 `agent.py` |
 | V4 | 会话持久化：关闭再打开，对话还在 | 重写 `main.py`，微调 `agent.py` |
 | V5 | 补丁式编辑：精确替换，不重写整个文件 | 改了 `tools.py` 和 `llm.py` |
-| V6+ | 命令安全 / 自动验证 | 见[路线图](docs/TOY_TO_USABLE_ROADMAP.md) |
+| V6 | 命令安全：白名单 + 危险拦截 + 超时 | 改了 `tools.py` 和 `llm.py` |
+| V7+ | 自动验证 / 更多 | 见[路线图](docs/TOY_TO_USABLE_ROADMAP.md) |
 
 **建议所有学习者从 V1 开始。**
 
@@ -67,7 +68,8 @@ toy_agent/
     ├── v2-multi-turn/
     ├── v3-streaming-messages/
     ├── v4-session-persistence/
-    └── v5-patch-editing/
+    ├── v5-patch-editing/
+    └── v6-command-safety/
 ```
 
 ## 快速开始
@@ -77,7 +79,7 @@ toy_agent/
 export ANTHROPIC_API_KEY=your_deepseek_key
 
 # 2. 进入最新版本
-cd versions/v5-patch-editing
+cd versions/v6-command-safety
 
 # 3. 安装依赖
 pip install python-dotenv
