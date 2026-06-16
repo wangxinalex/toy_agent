@@ -12,6 +12,7 @@
 | V4 | [`v4-session-persistence/`](v4-session-persistence/) | 会话持久化：关闭再打开，对话还在 | 改了 `main.py` 和 `agent.py` |
 | V5 | [`v5-patch-editing/`](v5-patch-editing/) | 补丁式编辑：精确替换，不重写整个文件 | 改了 `tools.py` 和 `llm.py` |
 | V6 | [`v6-command-safety/`](v6-command-safety/) | 命令安全：白名单 + 危险模式拦截 + 超时 | 改了 `tools.py` 和 `llm.py` |
+| V7 | [`v7-verify-loop/`](v7-verify-loop/) | 自动验证闭环：修改代码后必须验证通过才能 finish | 改了 `agent.py` 和 `llm.py` |
 
 ## V1 — 单轮对话
 
@@ -87,6 +88,18 @@ python main.py "in tools.py, change the truncate_output default limit from 4000 
 ```bash
 cd versions/v6-command-safety
 python main.py "run pytest and tell me the result"
+```
+
+## V7 — 自动验证闭环
+
+**路径**：[`versions/v7-verify-loop/`](v7-verify-loop/)
+
+**一句话**：修改代码后必须运行验证命令，验证失败则修正再验证，循环直至通过才能 finish。
+
+**怎么跑**：
+```bash
+cd versions/v7-verify-loop
+python main.py "create hello.py with print('hello'), then verify it runs correctly"
 ```
 
 ## 学习建议
