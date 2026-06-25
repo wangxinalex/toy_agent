@@ -41,6 +41,7 @@ def test_success_resets_failure_counter() -> None:
         [
             {"action": "read_file", "path": "nonexistent.txt"},   # fail 1
             {"action": "write_file", "path": "counter_probe.tmp", "content": "ok"},  # success → reset
+            {"action": "run_command", "command": "echo ok"},      # success → clear needs_verification
             {"action": "read_file", "path": "nonexistent.txt"},   # fail 1 again (counter reset)
             {"action": "finish", "summary": "done"},
         ]

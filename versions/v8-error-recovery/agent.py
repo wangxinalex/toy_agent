@@ -131,7 +131,7 @@ def run_agent(
         # 真实产品会用更精细的逻辑（如限定命令前缀、要求 returncode 前检查写操作等）。
         if action in {"write_file", "apply_patch"} and result.get("ok"):
             needs_verification = True
-        else:
+        elif action == "run_command" and result.get("ok"):
             needs_verification = False
 
     print("\nAgent stopped: reached max steps.")
