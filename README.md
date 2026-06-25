@@ -9,7 +9,7 @@
 按版本顺序阅读，**每个版本只引入极少的变化**：
 
 ```
-V1 (单轮闭环) → V2 (多轮交互) → V3 (流式+消息) → V4 (会话持久化) → V5 (补丁编辑) → V6 (命令安全) → V7+ (规划中)
+V1 (单轮闭环) → V2 (多轮交互) → V3 (流式+消息) → V4 (会话持久化) → V5 (补丁编辑) → V6 (命令安全) → V7 (验证闭环)
 ```
 
 | 版本 | 命题 | 改了什么 |
@@ -20,7 +20,7 @@ V1 (单轮闭环) → V2 (多轮交互) → V3 (流式+消息) → V4 (会话持
 | V4 | 会话持久化：关闭再打开，对话还在 | 重写 `main.py`，微调 `agent.py` |
 | V5 | 补丁式编辑：精确替换，不重写整个文件 | 改了 `tools.py` 和 `llm.py` |
 | V6 | 命令安全：白名单 + 危险拦截 + 超时 | 改了 `tools.py` 和 `llm.py` |
-| V7+ | 自动验证 / 更多 | 见[路线图](docs/TOY_TO_USABLE_ROADMAP.md) |
+| V7 | 自动验证闭环：修改代码后必须验证通过才能 finish | 改了 `agent.py` 和 `llm.py` |
 
 **建议所有学习者从 V1 开始。**
 
@@ -69,7 +69,8 @@ toy_agent/
     ├── v3-streaming-messages/
     ├── v4-session-persistence/
     ├── v5-patch-editing/
-    └── v6-command-safety/
+    ├── v6-command-safety/
+    └── v7-verify-loop/
 ```
 
 ## 快速开始
@@ -79,7 +80,7 @@ toy_agent/
 export ANTHROPIC_API_KEY=your_deepseek_key
 
 # 2. 进入最新版本
-cd versions/v6-command-safety
+cd versions/v7-verify-loop
 
 # 3. 安装依赖
 pip install python-dotenv
@@ -106,7 +107,7 @@ export ANTHROPIC_MODEL="claude-sonnet-4-6"
 
 ## 设计原则
 
-- **每个版本只改最少代码**。V1 → V2 只动了 `main.py`；V3 主改 `llm.py`；V4 主改 `main.py`；V5 只改 `tools.py` 和 `llm.py`。
+- **每个版本只改最少代码**。V1 → V2 只动了 `main.py`；V3 主改 `llm.py`；V4 主改 `main.py`；V5 只改 `tools.py` 和 `llm.py`；V6 改 `tools.py` 和 `llm.py`；V7 改 `agent.py` 和 `llm.py`。
 - **每个版本独立可运行**。`cd` 进去就能跑，互不依赖。
 - **代码即文档**。关键函数有注释，变量名刻意直白，结构刻意扁平。
 - **版本是目录快照**。横向对比文件用目录，纵向追踪变更用 Git。
@@ -116,6 +117,6 @@ export ANTHROPIC_MODEL="claude-sonnet-4-6"
 | 你在找什么 | 去这里 |
 |-----------|--------|
 | 所有版本一句话概览 | [`versions/INDEX.md`](versions/INDEX.md) |
-| V1-V4 每个版本的深度讲解 | `versions/v*/README.md` |
-| V5+ 演进计划 | [`docs/TOY_TO_USABLE_ROADMAP.md`](docs/TOY_TO_USABLE_ROADMAP.md) |
+| V1-V7 每个版本的深度讲解 | `versions/v*/README.md` |
+| V8+ 演进计划 | [`docs/TOY_TO_USABLE_ROADMAP.md`](docs/TOY_TO_USABLE_ROADMAP.md) |
 | Git 规范 & 项目说明 | [`CLAUDE.md`](CLAUDE.md) |

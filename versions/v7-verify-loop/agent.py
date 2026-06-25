@@ -62,8 +62,9 @@ def run_agent(
         history = history[-HISTORY_MAX_ENTRIES:]
         history.append({"task": task})
 
-    # V7：追踪是否执行过验证命令（成功的 run_command 即视为验证）。
-    verified = False
+    # V7：追踪当前修改是否还没验证。
+    # 新任务默认不需要验证；只有写文件后才进入“必须验证”状态。
+    needs_verification = False
 
     for step in range(1, max_steps + 1):
         print(f"\n--- Step {step} ---")
@@ -76,8 +77,8 @@ def run_agent(
         action = decision.get("action")
 
         if action == "finish":
-            # V7：拦截未验证的 finish，强制模型回去验证。
-            if not verified:
+            # V7：拦截有未验证修改的 finish，强制模型回去验证。
+            if needs_verification:
                 print(f"\n  [V7] {VERIFY_REQUIRED_MSG}")
                 history.append({"decision": decision, "result": {"ok": False, "error": VERIFY_REQUIRED_MSG}})
                 continue
@@ -95,9 +96,15 @@ def run_agent(
         )
         history.append({"decision": decision, "result": result})
 
-        # V7：成功的 run_command 视为一次验证。
-        if action == "run_command" and result.get("ok"):
-            verified = True
+        # V7：写文件会让当前工作进入“未验证”状态；成功的 run_command 会清除它。
+        # 局限性：任何成功的 run_command（包括 ls、git status）都会清除 needs_verification，
+        # 不区分是否为真正的验证命令（如 pytest、compileall）。
+        # 这是有意简化——判断"什么命令算验证"在教学版本中不值得增加复杂度，
+        # 真实产品会用更精细的逻辑（如限定命令前缀、要求 returncode 前检查写操作等）。
+        if action in {"write_file", "apply_patch"} and result.get("ok"):
+            needs_verification = True
+        elif action == "run_command" and result.get("ok"):
+            needs_verification = False
 
     print("\nAgent stopped: reached max steps.")
     return "Agent stopped: reached max steps.", history

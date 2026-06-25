@@ -40,6 +40,8 @@ COMMAND_WHITELIST = [
 # 危险模式：即使命令通过了白名单，命中这些模式也拒绝执行。
 # 这是第二道防线：防止白名单内的命令被组合利用。
 DANGEROUS_PATTERNS = [
+    r"[;&|`]",                     # shell 组合 / 管道 / 命令替换
+    r"\$\(",                      # 命令替换
     r"\brm\s+-(?:rf?|fr)\b",      # rm -rf / rm -r / rm -f
     r"\brm\s+.*\*",               # rm 含通配符
     r">\s*/dev/",                 # 写入设备文件
