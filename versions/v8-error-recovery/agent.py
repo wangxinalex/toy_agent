@@ -16,7 +16,7 @@ MAX_CONSECUTIVE_FAILURES = 3
 
 # V8：达到重试上限时注入的提示消息。
 RETRY_LIMIT_MSG = (
-    "This action has failed {n} consecutive times. "
+    "This action has failed {n} consecutive times on '{target}'. "
     "You must try a completely different approach. "
     "Do not retry the same action on the same file."
 )
@@ -109,7 +109,7 @@ def run_agent(
         if not result.get("ok"):
             failure_counts[action_key] = failure_counts.get(action_key, 0) + 1
             if failure_counts[action_key] >= MAX_CONSECUTIVE_FAILURES:
-                msg = RETRY_LIMIT_MSG.format(n=failure_counts[action_key])
+                msg = RETRY_LIMIT_MSG.format(n=failure_counts[action_key], target=action_key[1])
                 print(f"\n  [V8] Action '{action}' on '{action_key[1]}' failed {failure_counts[action_key]} times. Skipping.")
                 history.append({"decision": decision, "result": {"ok": False, "error": msg}})
                 del failure_counts[action_key]
@@ -131,7 +131,7 @@ def run_agent(
         # 真实产品会用更精细的逻辑（如限定命令前缀、要求 returncode 前检查写操作等）。
         if action in {"write_file", "apply_patch"} and result.get("ok"):
             needs_verification = True
-        elif action == "run_command" and result.get("ok"):
+        else:
             needs_verification = False
 
     print("\nAgent stopped: reached max steps.")
