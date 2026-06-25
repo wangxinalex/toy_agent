@@ -1,6 +1,6 @@
 # 版本索引
 
-这个文档是各版本的快速导航。建议按 V1 → V2 → V3 → V4 → V5 → V6 → V7 的顺序阅读。
+这个文档是各版本的快速导航。建议按 V1 → V2 → V3 → V4 → V5 → V6 → V7 → V8 的顺序阅读。
 
 ## 版本总览
 
@@ -13,6 +13,7 @@
 | V5 | [`v5-patch-editing/`](v5-patch-editing/) | 补丁式编辑：精确替换，不重写整个文件 | 改了 `tools.py` 和 `llm.py` |
 | V6 | [`v6-command-safety/`](v6-command-safety/) | 命令安全：白名单 + 危险模式拦截 + 超时 | 改了 `tools.py` 和 `llm.py` |
 | V7 | [`v7-verify-loop/`](v7-verify-loop/) | 自动验证闭环：修改代码后必须验证通过才能 finish | 改了 `agent.py` 和 `llm.py` |
+| V8 | [`v8-error-recovery/`](v8-error-recovery/) | 错误恢复：连续失败自动跳过 | 改了 `agent.py` |
 
 ## V1 — 单轮对话
 
@@ -100,6 +101,18 @@ python main.py "run pytest and tell me the result"
 ```bash
 cd versions/v7-verify-loop
 python main.py "create hello.py with print('hello'), then verify it runs correctly"
+```
+
+## V8 — 错误恢复
+
+**路径**：[`versions/v8-error-recovery/`](v8-error-recovery/)
+
+**一句话**：同一操作连续失败 3 次后自动跳过，避免 agent 陷入死循环。
+
+**怎么跑**：
+```bash
+cd versions/v8-error-recovery
+python main.py "read main.py and explain what this project does"
 ```
 
 ## 学习建议
